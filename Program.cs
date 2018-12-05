@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 
-
 namespace MMWD_CS
-{    
+{
     static class Program
     {
         public static List<List<Food>> TabooList = new List<List<Food>>();
@@ -44,7 +43,7 @@ namespace MMWD_CS
             return ToList;
         }
         ///----------------------------------------Wpisywanie do pliku-----------------------------
-        public static void FromListToFile(List<Food> Source,string destination)
+        public static void FromListToFile(List<Food> Source, string destination)
         {
             //string[] List_Catcher = new string[] { };
             List<string> Converted_List = new List<string>();
@@ -56,11 +55,16 @@ namespace MMWD_CS
                     + Convert.ToString(Source[i].Fats) + " " + Convert.ToString(Source[i].Cost));
             }
             File.WriteAllLines(destination, Converted_List);
-
         }
+        //public static string[] Base_Catcher = File.ReadAllLines("produkty.txt");
         public static List<Food> Produkty = new List<Food>();
+        //public static List<string> Converted_Base = new List<string>();
         public static List<Food> Used = new List<Food>();
-        public static List<Food> Taboo = new List<Food>();
+        /// <summary>
+        /// Główny punkt wejścia dla aplikacji.
+        /// </summary>
+        [STAThread]
+
         ///-------------------------------Obliczanie funkcji celu----------------------------------------------
         public static double Function(List<Food> Solution, double BMR)
         {
@@ -81,7 +85,7 @@ namespace MMWD_CS
             }
             if (SumOfCalories > MaxCalories || SumOfCalories < MinCalories) Penalty++;
             if (SumOfCarbo > MaxCarbo || SumOfCarbo < MinCarbo) Penalty++;
-            if (SumOfFats > MaxFats || SumOfFats < MinFats) Penalty++;
+            if  (SumOfFats > MaxFats || SumOfFats < MinFats) Penalty++;
             if (SumOfProteins > MaxProteins || SumOfProteins < MinProteins) Penalty++;
             double Function = wsp1 * SumOfCosts + wsp2 * Penalty;
             return Function;
@@ -101,7 +105,7 @@ namespace MMWD_CS
             }
             return Solution;
         }
-        public static List<Food> FindNextSolution(List<Food> Solution, double BMR, ref List<List<Food>> TabooList, ref List<int> Lifetime)
+        public static List<Food> FindNextSolution(List<Food> Solution, double BMR)
         {
             List<Food> NextSolution = new List<Food>();
             int n = Solution.Count; //ilosc produktow w rozwiazaniu
@@ -119,7 +123,6 @@ namespace MMWD_CS
                 NextSolution[0] = Produkty[i];
                  if (Function(NextSolution, n, BMR) < Function(Solution, n, BMR)) Solution = NextSolution;
             }*/
-
             //OTOCZENIE: WYMIENIA LOSOWY ELEMENT Z OBECNEGO ROZW. NA INNY LOSOWY
             Random r = new Random();
             for (int i = 1; i < counter; i++)
@@ -138,10 +141,20 @@ namespace MMWD_CS
                 else
                 {
                     TabooList.Add(NextSolution);
-                    Lifetime.Add(4);
+                    LifeTime.Add(4);
                 }
             }
             return NextSolution;
+        }
+        //znajduje najlepsze rozwiazanie z otoczenia
+        static public List<Food> FindBestSolution(List<Food> Solution,double BMR)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                FindNextSolution(Solution, BMR);
+                CheckTaboo();
+            }
+            return Solution;
         }
         //CheckTaboo zmniejsza kadencję oraz usuwa z listy Taboo rozwiazania z zerowa kadencja
         public static void CheckTaboo()
@@ -156,17 +169,26 @@ namespace MMWD_CS
                 }
             }
         }
-        /// <summary>
-        /// Główny punkt wejścia dla aplikacji.
-        /// </summary>
-        [STAThread]
+
         static void Main()
         {
             Produkty = FromFileToList("produkty.txt");
             Used.AddRange(Produkty);
+
+            
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new Form3());
             Application.Run(new Form1());
+
+            //List<Food> Solution = RandSolution(5);
+            //foreach (Food food in Solution)
+            //Console.WriteLine(food.ToString());
+            //Console.WriteLine("LOL");
+            //Console.ReadKey();
         }
     }
 }
+
+
+
