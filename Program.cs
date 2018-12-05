@@ -9,6 +9,8 @@ namespace MMWD_CS
 {
     static class Program
     {
+
+
         public static List<List<Food>> TabooList = new List<List<Food>>();
         public static List<int> LifeTime = new List<int>();
 
