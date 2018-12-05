@@ -60,6 +60,7 @@ namespace MMWD_CS
         public static List<Food> Produkty = new List<Food>();
         //public static List<string> Converted_Base = new List<string>();
         public static List<Food> Used = new List<Food>();
+        public static List<Food> Taboo = new List<Food>();
         /// <summary>
         /// Główny punkt wejścia dla aplikacji.
         /// </summary>
@@ -178,7 +179,6 @@ namespace MMWD_CS
             
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form3());
             Application.Run(new Form1());
 
             //List<Food> Solution = RandSolution(5);
