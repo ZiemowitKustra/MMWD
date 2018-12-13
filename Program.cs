@@ -9,10 +9,11 @@ namespace MMWD_CS
 {
     static class Program
     {
+        public static List<int> TabooList = new List<int>(); //lista numerów (indeksów) pozycji których nie można zmieniać przez jakiś czas
+        public static List<int> LifeTime = new List<int>(); //lista kadencji danych elementow taboo list 
+        List<Food> Global_Solution = new List<Food>(); // przechowanie najlepszego globalnie rozwiązania
+        int cadence = 4;
 
-
-        public static List<List<Food>> TabooList = new List<List<Food>>();
-        public static List<int> LifeTime = new List<int>();
 
         ///----------------------------------------czytanie z pliku-----------------------------
         public static List<Food> FromFileToList(string source)
@@ -77,23 +78,19 @@ namespace MMWD_CS
             double wsp1 = 1, wsp2 = 2;
             for (int i = 0; i < n; i++)
             {
-                //if (Solutions[i] == 1)
-                //{
                 SumOfCosts = SumOfCosts + Solution[i].Cost;
                 SumOfCarbo = SumOfCarbo + Solution[i].Carbonhydrates;
                 SumOfFats = SumOfFats + Solution[i].Fats;
                 SumOfProteins = SumOfProteins + Solution[i].Proteins;
                 SumOfCalories = SumOfCalories + Solution[i].K_Calories;
-                //}1
             }
             if (SumOfCalories > MaxCalories || SumOfCalories < MinCalories) Penalty++;
             if (SumOfCarbo > MaxCarbo || SumOfCarbo < MinCarbo) Penalty++;
-            if  (SumOfFats > MaxFats || SumOfFats < MinFats) Penalty++;
+            if (SumOfFats > MaxFats || SumOfFats < MinFats) Penalty++;
             if (SumOfProteins > MaxProteins || SumOfProteins < MinProteins) Penalty++;
             double Function = wsp1 * SumOfCosts + wsp2 * Penalty;
             return Function;
         }
-        //srand(time(NULL));
         ///-------------------------------Znajdywanie randomowego rozwiązania-------------------------------------------------
 
         public static List<Food> RandSolution(int n)
@@ -102,7 +99,6 @@ namespace MMWD_CS
             Random r = new Random();
             for (int i = 0; i < n; i++)
             {
-                //int RandSolution = (rand() % counter) + 0;
                 int rInt = r.Next(0, 10);
                 Solution.Add(Produkty[rInt]);
             }
@@ -111,46 +107,57 @@ namespace MMWD_CS
         public static List<Food> FindNextSolution(List<Food> Solution, double BMR)
         {
             List<Food> NextSolution = new List<Food>();
-            int n = Solution.Count; //ilosc produktow w rozwiazaniu
+            List<Food> CopyofSolution = new List<Food>();
             int counter = Produkty.Count;//ilosc wszystkich produktow
+
             //przepisuje wszystkie produkty od 1 do n - ilosc wybranych produktow
-            for (int i = 0; i < n; i++)
+            for (int i = 0; i < Solution.Count; i++)
             {
                 NextSolution[i] = Solution[i];
             }
-            /*OTOCZENIE: ZMIANA PIERWSZEGO PRODUKTU NA DOWOLNY INNY
-            sprawdza czy po wymianie jednego produktu funkcja celu sie zmniejsza
-            jesli tak to ustawia to rozwiazanie nowym rozwiazaniem
-            for (int i = 0; i < counter; i++)
+            for (int i = 0; i < TabooList.Count; i++)
             {
-                NextSolution[0] = Produkty[i];
-                 if (Function(NextSolution, n, BMR) < Function(Solution, n, BMR)) Solution = NextSolution;
-            }*/
-            //OTOCZENIE: WYMIENIA LOSOWY ELEMENT Z OBECNEGO ROZW. NA INNY LOSOWY
+                CheckTabooSolution(TabooList[i],Solution);
+            }
+            CheckTaboo();
+            //OTOCZENIE: WYMIENIA LOSOWY ELEMENT Z OBECNEGO ROZW. NA LOSOWY - 10RAZY
             Random r = new Random();
-            for (int i = 1; i < counter; i++)
-            {
-                Rand:
-                int r1 = r.Next(0, n);
-                int r2 = r.Next(0, counter);
-                NextSolution[r1] = Produkty[r2];
 
-                for (int j = 0; j < TabooList.Count; j++)
+        Rand:
+            int r1 = r.Next(0, Solution.Count);
+            for (int j = 0; j < TabooList.Count; j++)
+            {
+                if (TabooList[j] == r1) goto Rand;
+            }
+            for (int j = 0; j < 10; j++)
+            {
+                int r2 = r.Next(0, counter);
+                Solution[r1] = Produkty[r2];
+                if (Function(Solution, BMR) < Function(NextSolution, BMR))
                 {
-                    if (TabooList[j] == Solution) goto Rand;
-                }
-                if (Function(NextSolution, BMR) < Function(Solution, BMR)) Solution = NextSolution;
-                // else dodaj to rozwiazanie na liste taboo
-                else
-                {
-                    TabooList.Add(NextSolution);
-                    LifeTime.Add(4);
+                    NextSolution = Solution;
+                    TabooList.Add(r1);
+                    LifeTime.Add(cadence);
                 }
             }
+            if (Function(NextSolution, BMR) < Function(GlobalSolution, BMR)) GlobalSolution = NextSolution;
             return NextSolution;
         }
         //znajduje najlepsze rozwiazanie z otoczenia
-        static public List<Food> FindBestSolution(List<Food> Solution,double BMR)
+        //--------------sprawdzenie czy rozwiazanie z listy taboo globalnie polepsza rozwiazanie
+        static public void CheckTabooSolution(int n,List<Food> Solution)
+        {
+                for (int j = 0; j < 10; j++)
+                {
+                    int r2 = r.Next(0, counter);
+                    Solution[n] = Produkty[r2];
+                    if (Function(Solution, BMR) < Function(GlobalSolution, BMR))
+                    {
+                        GlobalSolution = Solution;
+                    }
+                }
+        }
+        static public List<Food> FindBestSolution(List<Food> Solution, double BMR)
         {
             for (int i = 0; i < 10; i++)
             {
@@ -172,13 +179,12 @@ namespace MMWD_CS
                 }
             }
         }
-
         static void Main()
         {
             Produkty = FromFileToList("produkty.txt");
             Used.AddRange(Produkty);
 
-            
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
