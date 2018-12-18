@@ -5,14 +5,15 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 
+
 namespace MMWD_CS
 {
     static class Program
     {
         public static List<int> TabooList = new List<int>(); //lista numerów (indeksów) pozycji których nie można zmieniać przez jakiś czas
         public static List<int> LifeTime = new List<int>(); //lista kadencji danych elementow taboo list 
-        List<Food> Global_Solution = new List<Food>(); // przechowanie najlepszego globalnie rozwiązania
-        int cadence = 4;
+        public static List<Food> Global_Solution = new List<Food>(); // przechowanie najlepszego globalnie rozwiązania
+        public static int cadence = 4;
 
 
         ///----------------------------------------czytanie z pliku-----------------------------
@@ -107,7 +108,7 @@ namespace MMWD_CS
         public static List<Food> FindNextSolution(List<Food> Solution, double BMR)
         {
             List<Food> NextSolution = new List<Food>();
-            List<Food> CopyofSolution = new List<Food>();
+            //List<Food> CopyofSolution = new List<Food>();
             int counter = Produkty.Count;//ilosc wszystkich produktow
 
             //przepisuje wszystkie produkty od 1 do n - ilosc wybranych produktow
@@ -115,9 +116,10 @@ namespace MMWD_CS
             {
                 NextSolution[i] = Solution[i];
             }
+            //sprawdza czy rozwiazanie z listy taboo polepsza rozwiazanie globalnie
             for (int i = 0; i < TabooList.Count; i++)
             {
-                CheckTabooSolution(TabooList[i],Solution);
+                CheckTabooSolution(TabooList[i],Solution,BMR);
             }
             CheckTaboo();
             //OTOCZENIE: WYMIENIA LOSOWY ELEMENT Z OBECNEGO ROZW. NA LOSOWY - 10RAZY
@@ -140,20 +142,21 @@ namespace MMWD_CS
                     LifeTime.Add(cadence);
                 }
             }
-            if (Function(NextSolution, BMR) < Function(GlobalSolution, BMR)) GlobalSolution = NextSolution;
+            if (Function(NextSolution, BMR) < Function(Global_Solution, BMR)) Global_Solution = NextSolution;
             return NextSolution;
         }
         //znajduje najlepsze rozwiazanie z otoczenia
         //--------------sprawdzenie czy rozwiazanie z listy taboo globalnie polepsza rozwiazanie
-        static public void CheckTabooSolution(int n,List<Food> Solution)
+        static public void CheckTabooSolution(int n,List<Food> Solution,double BMR)
         {
-                for (int j = 0; j < 10; j++)
+            Random r = new Random();
+            for (int j = 0; j < 10; j++)
                 {
-                    int r2 = r.Next(0, counter);
+                    int r2 = r.Next(0, Produkty.Count);
                     Solution[n] = Produkty[r2];
-                    if (Function(Solution, BMR) < Function(GlobalSolution, BMR))
+                    if (Function(Solution, BMR) < Function(Global_Solution, BMR))
                     {
-                        GlobalSolution = Solution;
+                        Global_Solution = Solution;
                     }
                 }
         }
@@ -179,7 +182,7 @@ namespace MMWD_CS
                 }
             }
         }
-        static void Main()
+        static void Main(string[] args)
         {
             Produkty = FromFileToList("produkty.txt");
             Used.AddRange(Produkty);
@@ -192,8 +195,8 @@ namespace MMWD_CS
             //List<Food> Solution = RandSolution(5);
             //foreach (Food food in Solution)
             //Console.WriteLine(food.ToString());
-            //Console.WriteLine("LOL");
-            //Console.ReadKey();
+            Console.WriteLine("LOL");
+            Console.ReadKey();
         }
     }
 }
