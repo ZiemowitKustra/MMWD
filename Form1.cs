@@ -50,6 +50,18 @@ namespace MMWD_CS
         {
 
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Temp = Program.FindNextSolution(Temp, F3.BMR);
+            //label3.Text = Convert.ToString(temp2);
+            foreach (Food food in Temp)
+                listBox3.Items.Add(food.ToString());
+            listBox3.Items.Add("\n");
+            listBox3.Items.Add(Program.Function(Temp, F3.BMR));
+            listBox3.Items.Add(Program.Function(Program.Global_Solution, F3.BMR));
+            listBox3.Items.Add("\n");
+        }
     }
 }
 
