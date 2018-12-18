@@ -36,6 +36,8 @@
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.button2 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
+            this.button4 = new System.Windows.Forms.Button();
+            this.listBox3 = new System.Windows.Forms.ListBox();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -63,14 +65,14 @@
             // restrictionsToolStripMenuItem
             // 
             this.restrictionsToolStripMenuItem.Name = "restrictionsToolStripMenuItem";
-            this.restrictionsToolStripMenuItem.Size = new System.Drawing.Size(160, 26);
+            this.restrictionsToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
             this.restrictionsToolStripMenuItem.Text = "&Restrictions";
             this.restrictionsToolStripMenuItem.Click += new System.EventHandler(this.restrictionsToolStripMenuItem_Click);
             // 
             // parametersToolStripMenuItem
             // 
             this.parametersToolStripMenuItem.Name = "parametersToolStripMenuItem";
-            this.parametersToolStripMenuItem.Size = new System.Drawing.Size(160, 26);
+            this.parametersToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
             this.parametersToolStripMenuItem.Text = "&Parameters";
             this.parametersToolStripMenuItem.Click += new System.EventHandler(this.parametersToolStripMenuItem_Click);
             // 
@@ -121,11 +123,32 @@
             this.label2.TabIndex = 7;
             this.label2.Text = "label2";
             // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(465, 377);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(75, 23);
+            this.button4.TabIndex = 8;
+            this.button4.Text = "button4";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // listBox3
+            // 
+            this.listBox3.FormattingEnabled = true;
+            this.listBox3.ItemHeight = 16;
+            this.listBox3.Location = new System.Drawing.Point(581, 261);
+            this.listBox3.Name = "listBox3";
+            this.listBox3.Size = new System.Drawing.Size(127, 180);
+            this.listBox3.TabIndex = 9;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(801, 473);
+            this.Controls.Add(this.listBox3);
+            this.Controls.Add(this.button4);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.listBox1);
@@ -155,5 +178,12 @@
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label label2;
+
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ListBox listBox2;
+        private System.Windows.Forms.MenuStrip menuStrip2;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.ListBox listBox3;
     }
 }
