@@ -38,6 +38,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
             this.listBox3 = new System.Windows.Forms.ListBox();
+            this.button5 = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -137,16 +138,27 @@
             // 
             this.listBox3.FormattingEnabled = true;
             this.listBox3.ItemHeight = 16;
-            this.listBox3.Location = new System.Drawing.Point(581, 261);
+            this.listBox3.Location = new System.Drawing.Point(546, 229);
             this.listBox3.Name = "listBox3";
-            this.listBox3.Size = new System.Drawing.Size(127, 180);
+            this.listBox3.Size = new System.Drawing.Size(162, 388);
             this.listBox3.TabIndex = 9;
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(92, 402);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(75, 23);
+            this.button5.TabIndex = 10;
+            this.button5.Text = "button5";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(801, 473);
+            this.ClientSize = new System.Drawing.Size(801, 646);
+            this.Controls.Add(this.button5);
             this.Controls.Add(this.listBox3);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.label2);
@@ -185,5 +197,6 @@
         private System.Windows.Forms.MenuStrip menuStrip2;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.ListBox listBox3;
+        private System.Windows.Forms.Button button5;
     }
 }
