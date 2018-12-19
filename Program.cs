@@ -112,18 +112,14 @@ namespace MMWD_CS
             //List<Food> CopyofSolution = new List<Food>();
             int counter = Produkty.Count;//ilosc wszystkich produktow
             NextSolution = Solution;
-
             //przepisuje wszystkie produkty od 1 do n - ilosc wybranych produktow
-            /*for (int i = 0; i < 4; i++)
-            {
-                NextSolution[i] = Solution[i];
-            }*/
+       
             //sprawdza czy rozwiazanie z listy taboo polepsza rozwiazanie globalnie
-            for (int i = 0; i < TabooList.Count; i++)
-            {
-                CheckTabooSolution(TabooList[i], Solution, BMR);
-            }
-            CheckTaboo();
+            //for (int i = 0; i < TabooList.Count; i++)
+            //{
+            //    CheckTabooSolution(TabooList[i], Solution, BMR);
+            //}
+            //CheckTaboo();
             //OTOCZENIE: WYMIENIA LOSOWY ELEMENT Z OBECNEGO ROZW. NA LOSOWY - 10RAZY
             Random r = new Random();
 
@@ -194,7 +190,6 @@ namespace MMWD_CS
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
 
-            
             //List<Food> Solution = RandSolution(5);
             //foreach (Food food in Solution)
             //Console.WriteLine(food.ToString());
