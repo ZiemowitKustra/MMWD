@@ -61,6 +61,13 @@ namespace MMWD_CS
             listBox3.Items.Add(Program.Function(Temp, F3.BMR));
             listBox3.Items.Add(Program.Function(Program.Global_Solution, F3.BMR));
             listBox3.Items.Add("\n");
+            Program.FromListToFile(Temp, "wyniki.txt");
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+
+            //Program.FromListToFile(Temp, "wyniki.txt");
         }
     }
 }
