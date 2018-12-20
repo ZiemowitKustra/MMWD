@@ -103,7 +103,8 @@ namespace MMWD_CS
                 int rInt = r.Next(0, 10);
                 Solution.Add(Produkty[rInt]);
             }
-            Global_Solution = Solution;
+            Global_Solution.AddRange(Solution);
+            //przekopiowac 
             return Solution;
         }
         public static List<Food> FindNextSolution(List<Food> Solution, double BMR)
@@ -129,18 +130,18 @@ namespace MMWD_CS
             {
                 if (TabooList[j] == r1) goto Rand;
             }
-            for (int j = 0; j < 10; j++)
+            for (int j = 0; j < 5; j++)
             {
                 int r2 = r.Next(0, counter);
                 Solution[r1] = Produkty[r2];
                 if (Function(Solution, BMR) < Function(NextSolution, BMR))
                 {
-                    NextSolution = Solution;
+                    NextSolution.AddRange(Solution);//znalezc inna funkcje ktora bedzie podmieniac a nie dodawac
                     TabooList.Add(r1);
                     LifeTime.Add(cadence);
                 }
             }
-            if (Function(NextSolution, BMR) < Function(Global_Solution, BMR)) Global_Solution = NextSolution;
+            if (Function(NextSolution, BMR) < Function(Global_Solution, BMR)) Global_Solution.AddRange(NextSolution);
             return NextSolution;
                      
         }
