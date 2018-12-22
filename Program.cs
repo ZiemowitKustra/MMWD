@@ -13,7 +13,7 @@ namespace MMWD_CS
         public static List<int> TabooList = new List<int>(); //lista numerów (indeksów) pozycji których nie można zmieniać przez jakiś czas
         public static List<int> LifeTime = new List<int>(); //lista kadencji danych elementow taboo list 
         public static List<Food> Global_Solution = new List<Food>(); // przechowanie najlepszego globalnie rozwiązania
-        public static int cadence = 4;
+        public static int cadence = 2;
 
 
         ///----------------------------------------czytanie z pliku-----------------------------
@@ -112,15 +112,15 @@ namespace MMWD_CS
             List<Food> NextSolution = new List<Food>();
             //List<Food> CopyofSolution = new List<Food>();
             int counter = Produkty.Count;//ilosc wszystkich produktow
-            NextSolution = Solution;
+            NextSolution.AddRange(Solution);
             //przepisuje wszystkie produkty od 1 do n - ilosc wybranych produktow
        
             //sprawdza czy rozwiazanie z listy taboo polepsza rozwiazanie globalnie
-            //for (int i = 0; i < TabooList.Count; i++)
-            //{
-            //    CheckTabooSolution(TabooList[i], Solution, BMR);
-            //}
-            //CheckTaboo();
+            for (int i = 0; i < TabooList.Count; i++)
+            {
+                CheckTabooSolution(TabooList[i], Solution, BMR);
+            }
+           CheckTaboo();
             //OTOCZENIE: WYMIENIA LOSOWY ELEMENT Z OBECNEGO ROZW. NA LOSOWY - 10RAZY
             Random r = new Random();
 
@@ -136,12 +136,17 @@ namespace MMWD_CS
                 Solution[r1] = Produkty[r2];
                 if (Function(Solution, BMR) < Function(NextSolution, BMR))
                 {
-                    NextSolution.AddRange(Solution);//znalezc inna funkcje ktora bedzie podmieniac a nie dodawac
+                    //znalezc inna funkcje ktora bedzie podmieniac a nie dodawac
+                    NextSolution.Clear();
+                    NextSolution.AddRange(Solution);
                     TabooList.Add(r1);
                     LifeTime.Add(cadence);
                 }
             }
-            if (Function(NextSolution, BMR) < Function(Global_Solution, BMR)) Global_Solution.AddRange(NextSolution);
+            if (Function(NextSolution, BMR) < Function(Global_Solution, BMR))
+            {
+                Global_Solution.Clear();
+                Global_Solution.AddRange(NextSolution); }
             return NextSolution;
                      
         }
@@ -156,10 +161,12 @@ namespace MMWD_CS
                 Solution[n] = Produkty[r2];
                 if (Function(Solution, BMR) < Function(Global_Solution, BMR))
                 {
-                    Global_Solution = Solution;
+                    Global_Solution.Clear();
+                    Global_Solution.AddRange(Solution);
                 }
             }
-        }
+            }
+        
         static public List<Food> FindBestSolution(List<Food> Solution, double BMR)
         {
             for (int i = 0; i < 10; i++)
