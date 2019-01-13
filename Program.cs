@@ -110,17 +110,21 @@ namespace MMWD_CS
         public static List<Food> FindNextSolution(List<Food> Solution, double BMR)
         {
             List<Food> NextSolution = new List<Food>();
+            List<Food> PreviousSolution = new List<Food>();
             //List<Food> CopyofSolution = new List<Food>();
             int counter = Produkty.Count;//ilosc wszystkich produktow
             NextSolution.AddRange(Solution);
+            PreviousSolution.AddRange(Solution);
             //przepisuje wszystkie produkty od 1 do n - ilosc wybranych produktow
-       
+
             //sprawdza czy rozwiazanie z listy taboo polepsza rozwiazanie globalnie
             for (int i = 0; i < TabooList.Count; i++)
             {
                 CheckTabooSolution(TabooList[i], Solution, BMR);
             }
            CheckTaboo();
+            Solution.Clear();
+            Solution.AddRange(NextSolution);
             //OTOCZENIE: WYMIENIA LOSOWY ELEMENT Z OBECNEGO ROZW. NA LOSOWY - 10RAZY
             Random r = new Random();
 
@@ -136,10 +140,16 @@ namespace MMWD_CS
                 Solution[r1] = Produkty[r2];
                 if (Function(Solution, BMR) < Function(NextSolution, BMR))
                 {
-                    //znalezc inna funkcje ktora bedzie podmieniac a nie dodawac
                     NextSolution.Clear();
                     NextSolution.AddRange(Solution);
-                    TabooList.Add(r1);
+                    
+                }
+            }
+            for (int j = 0; j < NextSolution.Count; j++)
+            {
+                if (NextSolution[j] != PreviousSolution[j])
+                {
+                    TabooList.Add(j);
                     LifeTime.Add(cadence);
                 }
             }
@@ -155,9 +165,9 @@ namespace MMWD_CS
         static public void CheckTabooSolution(int n, List<Food> Solution, double BMR)
         {
             Random r = new Random();
-            for (int j = 0; j < 10; j++)
+            for (int j = 0; j < 10 ; j++)
             {
-                int r2 = r.Next(0, Produkty.Count);
+                int r2 = r.Next(0, Produkty.Count());
                 Solution[n] = Produkty[r2];
                 if (Function(Solution, BMR) < Function(Global_Solution, BMR))
                 {
