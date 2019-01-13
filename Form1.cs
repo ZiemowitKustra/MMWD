@@ -15,6 +15,7 @@ namespace MMWD_CS
     {
         Form3 F3 = new Form3();
         public List<Food> Temp = new List<Food>();
+        public List<Food> Temp2 = new List<Food>();
         int n = 4;
 
         public Form1()
@@ -35,7 +36,8 @@ namespace MMWD_CS
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Temp = Program.RandSolution(n);
+            Temp.Clear();
+            Temp.AddRange(Program.RandSolution(n));
             foreach (Food food in Temp)
                 listBox1.Items.Add(food.ToString());
         }
@@ -53,21 +55,36 @@ namespace MMWD_CS
 
         private void button4_Click(object sender, EventArgs e)
         {
-            Temp = Program.FindNextSolution(Temp, F3.BMR);
+            
+            Temp2.AddRange(Program.FindNextSolution(Temp, F3.BMR));
+
             //label3.Text = Convert.ToString(temp2);
-            foreach (Food food in Temp)
+            listBox3.Items.Add("Lokalne\n");
+            foreach (Food food in Temp2)
                 listBox3.Items.Add(food.ToString());
             listBox3.Items.Add("\n");
-            listBox3.Items.Add(Program.Function(Temp, F3.BMR));
+            listBox3.Items.Add(Program.Function(Temp2, F3.BMR));
+            listBox3.Items.Add("\n");
+            listBox3.Items.Add("Globalne\n");
+            foreach (Food food in Program.Global_Solution)
+                listBox3.Items.Add(food.ToString());
             listBox3.Items.Add(Program.Function(Program.Global_Solution, F3.BMR));
             listBox3.Items.Add("\n");
-            Program.FromListToFile(Temp, "wyniki.txt");
+            Program.FromListToFile(Temp2, "wyniki.txt");
+            Temp.Clear();
+            Temp.AddRange(Temp2);
+            Temp2.Clear();
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
 
             //Program.FromListToFile(Temp, "wyniki.txt");
+        }
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
