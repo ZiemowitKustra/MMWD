@@ -70,6 +70,12 @@ namespace MMWD_CS
                 listBox3.Items.Add(food.ToString());
             listBox3.Items.Add(Program.Function(Program.Global_Solution, F3.BMR));
             listBox3.Items.Add("\n");
+            foreach (int food in Program.TabooList)
+                listBox3.Items.Add(food.ToString());
+            listBox3.Items.Add("\n");
+            foreach (int food in Program.LifeTime)
+                listBox3.Items.Add(food.ToString());
+            listBox3.Items.Add("\n");
             Program.FromListToFile(Temp2, "wyniki.txt");
             Temp.Clear();
             Temp.AddRange(Temp2);
