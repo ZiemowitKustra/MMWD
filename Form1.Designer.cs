@@ -50,7 +50,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(8, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(801, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(878, 28);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -66,14 +66,14 @@
             // restrictionsToolStripMenuItem
             // 
             this.restrictionsToolStripMenuItem.Name = "restrictionsToolStripMenuItem";
-            this.restrictionsToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
+            this.restrictionsToolStripMenuItem.Size = new System.Drawing.Size(160, 26);
             this.restrictionsToolStripMenuItem.Text = "&Restrictions";
             this.restrictionsToolStripMenuItem.Click += new System.EventHandler(this.restrictionsToolStripMenuItem_Click);
             // 
             // parametersToolStripMenuItem
             // 
             this.parametersToolStripMenuItem.Name = "parametersToolStripMenuItem";
-            this.parametersToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
+            this.parametersToolStripMenuItem.Size = new System.Drawing.Size(160, 26);
             this.parametersToolStripMenuItem.Text = "&Parameters";
             this.parametersToolStripMenuItem.Click += new System.EventHandler(this.parametersToolStripMenuItem_Click);
             // 
@@ -88,11 +88,11 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(373, 122);
+            this.button1.Location = new System.Drawing.Point(222, 120);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(155, 95);
             this.button1.TabIndex = 2;
-            this.button1.Text = "button1";
+            this.button1.Text = "Random Solution";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -100,10 +100,11 @@
             // 
             this.listBox1.FormattingEnabled = true;
             this.listBox1.ItemHeight = 16;
-            this.listBox1.Location = new System.Drawing.Point(553, 37);
+            this.listBox1.Location = new System.Drawing.Point(222, 244);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(155, 180);
             this.listBox1.TabIndex = 3;
+            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
             // button2
             // 
@@ -111,26 +112,26 @@
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(155, 97);
             this.button2.TabIndex = 4;
-            this.button2.Text = "button2";
+            this.button2.Text = "Function";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(39, 40);
+            this.label2.Location = new System.Drawing.Point(47, 244);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(46, 17);
+            this.label2.Size = new System.Drawing.Size(70, 17);
             this.label2.TabIndex = 7;
-            this.label2.Text = "label2";
+            this.label2.Text = "Function: ";
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(465, 377);
+            this.button4.Location = new System.Drawing.Point(403, 120);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
+            this.button4.Size = new System.Drawing.Size(157, 95);
             this.button4.TabIndex = 8;
-            this.button4.Text = "button4";
+            this.button4.Text = "Next Solution";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
@@ -138,14 +139,14 @@
             // 
             this.listBox3.FormattingEnabled = true;
             this.listBox3.ItemHeight = 16;
-            this.listBox3.Location = new System.Drawing.Point(546, 229);
+            this.listBox3.Location = new System.Drawing.Point(580, 41);
             this.listBox3.Name = "listBox3";
-            this.listBox3.Size = new System.Drawing.Size(162, 388);
+            this.listBox3.Size = new System.Drawing.Size(264, 628);
             this.listBox3.TabIndex = 9;
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(92, 402);
+            this.button5.Location = new System.Drawing.Point(42, 604);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(75, 23);
             this.button5.TabIndex = 10;
@@ -157,7 +158,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(801, 646);
+            this.ClientSize = new System.Drawing.Size(878, 807);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.listBox3);
             this.Controls.Add(this.button4);
