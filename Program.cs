@@ -13,7 +13,7 @@ namespace MMWD_CS
         public static List<int> TabooList = new List<int>(); //lista numerów (indeksów) pozycji których nie można zmieniać przez jakiś czas
         public static List<int> LifeTime = new List<int>(); //lista kadencji danych elementow taboo list 
         public static List<Food> Global_Solution = new List<Food>(); // przechowanie najlepszego globalnie rozwiązania
-        public static int cadence = 2;
+        public static int cadence = 4;
 
 
         ///----------------------------------------czytanie z pliku-----------------------------
@@ -75,21 +75,29 @@ namespace MMWD_CS
         {
             int n = Solution.Count;
             double SumOfCosts = 0, SumOfCarbo = 0, SumOfFats = 0, SumOfProteins = 0, SumOfCalories = 0, Penalty = 0;
-            double MaxCalories = BMR + 500, MaxCarbo = 0.65 * n, MaxFats = 0.25 * n, MaxProteins = 0.3 * n, MinCalories = BMR - 500, MinCarbo = 0.5 * n, MinFats = 0.15 * n, MinProteins = 0.2 * n;
-            double wsp1 = 1, wsp2 = 2;
+            double MaxCalories = BMR + 300, MaxCarbo = 0.065 * MaxCalories, MaxFats = 0.25 * MaxCalories, MaxProteins = 0.3 * MaxCalories;
+            double MinCalories = BMR - 300, MinCarbo = 0.05 * MinCalories, MinFats = 0.15 * MinCalories, MinProteins = 0.2 * MinCalories;
+            double  wsp2 = 1, wsp_edi = 0.1;
             for (int i = 0; i < n; i++)
             {
-                SumOfCosts = SumOfCosts + Solution[i].Cost;
-                SumOfCarbo = SumOfCarbo + Solution[i].Carbonhydrates;
-                SumOfFats = SumOfFats + Solution[i].Fats;
-                SumOfProteins = SumOfProteins + Solution[i].Proteins;
+
                 SumOfCalories = SumOfCalories + Solution[i].K_Calories;
+                SumOfCosts = SumOfCosts + Solution[i].Cost;
+                SumOfCarbo = SumOfCarbo + Solution[i].Carbonhydrates*Solution[i].K_Calories;
+                SumOfFats = SumOfFats + Solution[i].Fats*Solution[i].K_Calories;
+                SumOfProteins = SumOfProteins + Solution[i].Proteins*Solution[i].K_Calories;
             }
-            if (SumOfCalories > MaxCalories || SumOfCalories < MinCalories) Penalty++;
-            if (SumOfCarbo > MaxCarbo || SumOfCarbo < MinCarbo) Penalty++;
-            if (SumOfFats > MaxFats || SumOfFats < MinFats) Penalty++;
-            if (SumOfProteins > MaxProteins || SumOfProteins < MinProteins) Penalty++;
-            double Function = wsp1 * SumOfCosts + wsp2 * Penalty;
+            SumOfCalories = 2 * SumOfCalories;
+            if (SumOfCalories > MaxCalories) Penalty = Penalty + 0.1*(SumOfCalories - MaxCalories);
+            if (SumOfCalories < MinCalories) Penalty = Penalty + 0.1*(MinCalories - SumOfCalories);
+            if (SumOfCarbo > MaxCarbo) Penalty = Penalty + wsp_edi*(SumOfCarbo-MaxCarbo);
+            if (SumOfCarbo < MinCarbo) Penalty = Penalty + wsp_edi * (MinCarbo-SumOfCarbo);
+            if (SumOfFats > MaxFats) Penalty = Penalty + wsp_edi * (SumOfFats - MaxFats);
+            if (SumOfFats < MinFats) Penalty = Penalty + wsp_edi * (MinFats-SumOfFats);
+            if (SumOfProteins > MaxProteins) Penalty = Penalty + wsp_edi * (SumOfProteins-MaxProteins);
+            if (SumOfProteins < MinProteins) Penalty = Penalty + wsp_edi * (MinProteins-SumOfProteins);
+            SumOfCosts = 2 * SumOfCosts;
+            double Function =  SumOfCosts + wsp2 * Penalty;
             return Function;
         }
         ///-------------------------------Znajdywanie randomowego rozwiązania-------------------------------------------------
@@ -100,11 +108,31 @@ namespace MMWD_CS
             Random r = new Random();
             for (int i = 0; i < n; i++)
             {
+            Rand3:
                 int rInt = r.Next(0, 10);
+                for (int j = 0; j < Solution.Count(); j++)
+                {
+                    if (Solution[j] == Produkty[rInt]) goto Rand3;
+                }
                 Solution.Add(Produkty[rInt]);
             }
             Global_Solution.AddRange(Solution);
             //przekopiowac 
+            return Solution;
+        }
+        public static List<Food> SetSolution(int n)
+        {
+            List<Food> Solution = new List<Food>(n);
+            Solution.Add(Produkty[8]);//Cielecina, Marakuja, Masło,pieczen,Mozarella,Wino, Czekolada biala,Zurek
+            Solution.Add(Produkty[12]);
+            Solution.Add(Produkty[15]);
+            Solution.Add(Produkty[20]);
+            Solution.Add(Produkty[45]);
+            Solution.Add(Produkty[48]);
+            Solution.Add(Produkty[34]);
+            Solution.Add(Produkty[39]);
+            Global_Solution.AddRange(Solution);
+          
             return Solution;
         }
         public static List<Food> FindNextSolution(List<Food> Solution, double BMR)
@@ -122,7 +150,7 @@ namespace MMWD_CS
             {
                 CheckTabooSolution(TabooList[i], Solution, BMR);
             }
-           CheckTaboo();
+            CheckTaboo();
             Solution.Clear();
             Solution.AddRange(NextSolution);
             //OTOCZENIE: WYMIENIA LOSOWY ELEMENT Z OBECNEGO ROZW. NA LOSOWY - 10RAZY
@@ -134,15 +162,20 @@ namespace MMWD_CS
             {
                 if (TabooList[j] == r1) goto Rand;
             }
-            for (int j = 0; j < 5; j++)
+            for (int j = 0; j < 10; j++)
             {
+            Rand2:
                 int r2 = r.Next(0, counter);
+                for (int i = 0; i < Solution.Count(); i++)
+                {
+                    if (Solution[i] == Produkty[r2]) goto Rand2;
+                }
                 Solution[r1] = Produkty[r2];
                 if (Function(Solution, BMR) < Function(NextSolution, BMR))
                 {
                     NextSolution.Clear();
                     NextSolution.AddRange(Solution);
-                    
+
                 }
             }
             for (int j = 0; j < NextSolution.Count; j++)
@@ -156,16 +189,17 @@ namespace MMWD_CS
             if (Function(NextSolution, BMR) < Function(Global_Solution, BMR))
             {
                 Global_Solution.Clear();
-                Global_Solution.AddRange(NextSolution); }
+                Global_Solution.AddRange(NextSolution);
+            }
             return NextSolution;
-                     
+
         }
         //znajduje najlepsze rozwiazanie z otoczenia
         //--------------sprawdzenie czy rozwiazanie z listy taboo globalnie polepsza rozwiazanie
         static public void CheckTabooSolution(int n, List<Food> Solution, double BMR)
         {
             Random r = new Random();
-            for (int j = 0; j < 10 ; j++)
+            for (int j = 0; j < 10; j++)
             {
                 int r2 = r.Next(0, Produkty.Count());
                 Solution[n] = Produkty[r2];
@@ -175,13 +209,13 @@ namespace MMWD_CS
                     Global_Solution.AddRange(Solution);
                 }
             }
-            }
-        
+        }
+
         static public List<Food> FindBestSolution(List<Food> Solution, double BMR)
         {
             for (int i = 0; i < 10; i++)
             {
-                Solution=FindNextSolution(Solution, BMR);
+                Solution = FindNextSolution(Solution, BMR);
             }
             return Solution;
         }
@@ -207,12 +241,6 @@ namespace MMWD_CS
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
-
-            //List<Food> Solution = RandSolution(5);
-            //foreach (Food food in Solution)
-            //Console.WriteLine(food.ToString());
-            //Console.WriteLine("LOL");
-            //Console.ReadKey();
         }
     }
 }
