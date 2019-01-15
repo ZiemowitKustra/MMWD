@@ -17,7 +17,7 @@ namespace MMWD_CS
         public double hight;
         public double weight;
         public double BMI;
-        public double BMR;
+        public double BMR=1450;
         public double age;
         public Form3()
         {
