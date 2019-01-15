@@ -16,7 +16,7 @@ namespace MMWD_CS
         Form3 F3 = new Form3();
         public List<Food> Temp = new List<Food>();
         public List<Food> Temp2 = new List<Food>();
-        int n = 4;
+        int n = 8;
 
         public Form1()
         {
@@ -37,7 +37,9 @@ namespace MMWD_CS
         private void button1_Click(object sender, EventArgs e)
         {
             Temp.Clear();
-            Temp.AddRange(Program.RandSolution(n));
+            //Temp.AddRange(Program.RandSolution(n));
+            Temp.AddRange(Program.SetSolution(n));
+
             foreach (Food food in Temp)
                 listBox1.Items.Add(food.ToString());
         }
@@ -55,7 +57,7 @@ namespace MMWD_CS
 
         private void button4_Click(object sender, EventArgs e)
         {
-            
+            for (int i=0; i < 5; i++) { 
             Temp2.AddRange(Program.FindNextSolution(Temp, F3.BMR));
 
             //label3.Text = Convert.ToString(temp2);
@@ -63,23 +65,27 @@ namespace MMWD_CS
             foreach (Food food in Temp2)
                 listBox3.Items.Add(food.ToString());
             listBox3.Items.Add("\n");
+            
             listBox3.Items.Add(Program.Function(Temp2, F3.BMR));
-            listBox3.Items.Add("\n");
-            listBox3.Items.Add("Globalne\n");
-            foreach (Food food in Program.Global_Solution)
-                listBox3.Items.Add(food.ToString());
-            listBox3.Items.Add(Program.Function(Program.Global_Solution, F3.BMR));
-            listBox3.Items.Add("\n");
-            foreach (int food in Program.TabooList)
-                listBox3.Items.Add(food.ToString());
-            listBox3.Items.Add("\n");
-            foreach (int food in Program.LifeTime)
-                listBox3.Items.Add(food.ToString());
-            listBox3.Items.Add("\n");
-            Program.FromListToFile(Temp2, "wyniki.txt");
+           
+                /*listBox3.Items.Add("Globalne\n");
+                foreach (Food food in Program.Global_Solution)
+                    listBox3.Items.Add(food.ToString());
+                listBox3.Items.Add("\n");
+                listBox3.Items.Add(Program.Function(Program.Global_Solution, F3.BMR));
+                listBox3.Items.Add("\n");
+                foreach (int food in Program.TabooList)
+                    listBox3.Items.Add(food.ToString());
+                listBox3.Items.Add("\n");
+                foreach (int food in Program.LifeTime)
+                    listBox3.Items.Add(food.ToString());
+                listBox3.Items.Add("\n");*/
+
+                Program.FromListToFile(Temp2, "wyniki.txt");
             Temp.Clear();
             Temp.AddRange(Temp2);
             Temp2.Clear();
+        }
         }
 
         private void button5_Click(object sender, EventArgs e)
