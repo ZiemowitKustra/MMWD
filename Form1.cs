@@ -65,8 +65,8 @@ namespace MMWD_CS
             foreach (Food food in Temp2)
                 listBox3.Items.Add(food.ToString());
             listBox3.Items.Add("\n");
-            
-            listBox3.Items.Add(Program.Function(Temp2, F3.BMR));
+            double TEMP2 = Program.Function(Temp2, F3.BMR);
+            listBox3.Items.Add(TEMP2);
            
                 /*listBox3.Items.Add("Globalne\n");
                 foreach (Food food in Program.Global_Solution)
@@ -82,7 +82,9 @@ namespace MMWD_CS
                 listBox3.Items.Add("\n");*/
 
                 Program.FromListToFile(Temp2, "wyniki.txt");
-            Temp.Clear();
+                Program.Test(TEMP2, "Local.txt");
+                Program.Test(Program.Function(Program.Global_Solution, F3.BMR), "Global.txt");
+                Temp.Clear();
             Temp.AddRange(Temp2);
             Temp2.Clear();
         }

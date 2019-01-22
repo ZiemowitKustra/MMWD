@@ -46,6 +46,15 @@ namespace MMWD_CS
             }
             return ToList;
         }
+        ///---------------------------------------Test--------------------------------------------
+        public static void Test(double TEST, string destination)
+        {
+            if (File.Exists(destination))
+            {
+                string all_from_file = File.ReadAllText(destination) + Convert.ToString(TEST) + " ";
+                File.WriteAllText(destination, all_from_file);
+            }
+        }
         ///----------------------------------------Wpisywanie do pliku-----------------------------
         public static void FromListToFile(List<Food> Source, string destination)
         {
@@ -236,7 +245,6 @@ namespace MMWD_CS
         {
             Produkty = FromFileToList("produkty.txt");
             Used.AddRange(Produkty);
-
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
