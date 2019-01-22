@@ -13,7 +13,7 @@ namespace MMWD_CS
         public static List<int> TabooList = new List<int>(); //lista numerów (indeksów) pozycji których nie można zmieniać przez jakiś czas
         public static List<int> LifeTime = new List<int>(); //lista kadencji danych elementow taboo list 
         public static List<Food> Global_Solution = new List<Food>(); // przechowanie najlepszego globalnie rozwiązania
-        public static int cadence = 4, s = 10; //s - ilosc rozwiazan otoczenia
+        public static int cadence = 4;
 
 
         ///----------------------------------------czytanie z pliku-----------------------------
@@ -49,11 +49,7 @@ namespace MMWD_CS
         ///---------------------------------------Test--------------------------------------------
         public static void Test(double TEST, string destination)
         {
-            if (File.Exists(destination))
-            {
-                string all_from_file = File.ReadAllText(destination) + Convert.ToString(TEST) + " ";
-                File.WriteAllText(destination, all_from_file);
-            }
+                File.AppendAllText(destination, TEST.ToString()+Environment.NewLine);
         }
         ///----------------------------------------Wpisywanie do pliku-----------------------------
         public static void FromListToFile(List<Food> Source, string destination)
@@ -86,7 +82,7 @@ namespace MMWD_CS
             double SumOfCosts = 0, SumOfCarbo = 0, SumOfFats = 0, SumOfProteins = 0, SumOfCalories = 0, Penalty = 0;
             double MaxCalories = BMR + 300, MaxCarbo = 0.065 * MaxCalories, MaxFats = 0.25 * MaxCalories, MaxProteins = 0.3 * MaxCalories;
             double MinCalories = BMR - 300, MinCarbo = 0.05 * MinCalories, MinFats = 0.15 * MinCalories, MinProteins = 0.2 * MinCalories;
-            double  w2 = 0.1, wsp_edi = 0.1;
+            double  wsp2 = 1, wsp_edi = 0.1;
             for (int i = 0; i < n; i++)
             {
 
@@ -97,8 +93,8 @@ namespace MMWD_CS
                 SumOfProteins = SumOfProteins + Solution[i].Proteins*Solution[i].K_Calories;
             }
             SumOfCalories = 2 * SumOfCalories;
-            if (SumOfCalories > MaxCalories) Penalty = Penalty + w2*(SumOfCalories - MaxCalories);
-            if (SumOfCalories < MinCalories) Penalty = Penalty + w2*(MinCalories - SumOfCalories);
+            if (SumOfCalories > MaxCalories) Penalty = Penalty + 0.1*(SumOfCalories - MaxCalories);
+            if (SumOfCalories < MinCalories) Penalty = Penalty + 0.1*(MinCalories - SumOfCalories);
             if (SumOfCarbo > MaxCarbo) Penalty = Penalty + wsp_edi*(SumOfCarbo-MaxCarbo);
             if (SumOfCarbo < MinCarbo) Penalty = Penalty + wsp_edi * (MinCarbo-SumOfCarbo);
             if (SumOfFats > MaxFats) Penalty = Penalty + wsp_edi * (SumOfFats - MaxFats);
@@ -106,7 +102,7 @@ namespace MMWD_CS
             if (SumOfProteins > MaxProteins) Penalty = Penalty + wsp_edi * (SumOfProteins-MaxProteins);
             if (SumOfProteins < MinProteins) Penalty = Penalty + wsp_edi * (MinProteins-SumOfProteins);
             SumOfCosts = 2 * SumOfCosts;
-            double Function =  SumOfCosts + Penalty;
+            double Function =  SumOfCosts + wsp2 * Penalty;
             return Function;
         }
         ///-------------------------------Znajdywanie randomowego rozwiązania-------------------------------------------------
@@ -171,7 +167,7 @@ namespace MMWD_CS
             {
                 if (TabooList[j] == r1) goto Rand;
             }
-            for (int j = 0; j < s; j++)
+            for (int j = 0; j < 10; j++)
             {
             Rand2:
                 int r2 = r.Next(0, counter);
@@ -208,7 +204,7 @@ namespace MMWD_CS
         static public void CheckTabooSolution(int n, List<Food> Solution, double BMR)
         {
             Random r = new Random();
-            for (int j = 0; j < s; j++)
+            for (int j = 0; j < 10; j++)
             {
                 int r2 = r.Next(0, Produkty.Count());
                 Solution[n] = Produkty[r2];
@@ -243,6 +239,8 @@ namespace MMWD_CS
         }
         static void Main(string[] args)
         {
+            File.Delete("Local.txt");
+            File.Delete("Global.txt");
             Produkty = FromFileToList("produkty.txt");
             Used.AddRange(Produkty);
 
